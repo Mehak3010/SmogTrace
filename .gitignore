@@ -1,0 +1,61 @@
+AQI Datasets/
+cleaned_daily_fire_pm25.csv
+master_dashboard_data.csv
+model_dataset_with_features.csv
+
+# Catch-all: ignore any CSV/data file anywhere in the repo unless explicitly
+# force-added (git add -f) — keeps future dataset drops from leaking in too
+*.csv
+*.tsv
+*.parquet
+*.xlsx
+*.xls
+*.nc
+*.hdf
+*.h5
+*.sqlite
+*.db
+
+# ============================
+# Python virtual environment
+# ============================
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.pytest_cache/
+*.egg-info/
+
+# ============================
+# Node / frontend (dashboard, stubble-dashboard-app)
+# ============================
+node_modules/
+dist/
+build/
+.vite/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ============================
+# Environment / secrets
+# ============================
+.env
+.env.local
+.env.*.local
+
+# ============================
+# Editor / OS junk
+# ============================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
