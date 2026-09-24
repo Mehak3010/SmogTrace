@@ -9,26 +9,44 @@ numbers instead of received wisdom.
 
 ---
 
-## TL;DR
+## Findings
 
-- **Yes, fires predict smog** — same-day/next-day fire activity correlates with
-  Delhi PM2.5 at **r = 0.44**, decaying over the following week. That lag
-  shape is consistent with a ~12–36 hour Punjab-to-Delhi smoke transport
-  window, and it holds across all four seasons.
-- A **Ridge regression** trained on 2022–2024 and tested on the held-out 2025
-  season explains **48% of the variance** in daily PM2.5 (R² = 0.481) using
-  only fire-activity features — no weather data yet.
-- **2025's fire counts genuinely collapsed** (3,430 detections vs. 36,310 in
-  2022) — independently corroborated by Punjab Pollution Control Board
-  figures, not a data artifact. See [`PHASE1_FINDINGS.md`](./PHASE1_FINDINGS.md)
-  for the full writeup, including a data-quality issue that was caught and
-  corrected.
+**Data:** NASA FIRMS VIIRS (NOAA-20) fire detections over Punjab/Haryana,
+Oct–Nov **2022–2025** (4 seasons), merged with Delhi-NCR daily PM2.5 (OpenAQ).
+244 daily records after cleaning.
+
+**Yes — fires predict smog, with a lag.** Same-day/next-day fire activity
+correlates with Delhi PM2.5 at **r = 0.44**, decaying over the following
+week. That decay shape is consistent with a ~12–36 hour Punjab-to-Delhi
+smoke transport window, and it holds across all four seasons.
+
+| Lag (days) | 0 | 1 | 2 | 3 | 7 |
+|---|---|---|---|---|---|
+| Correlation | 0.435 | 0.398 | 0.335 | 0.291 | 0.251 |
+
+**A Ridge regression explains ~48% of daily PM2.5 variance** using only fire
+features, trained on 2022–2024 and tested on the fully held-out 2025 season
+(a genuine future-year test, not an interpolated split):
 
 | Model | R² | MAE | RMSE |
 |---|---|---|---|
 | **Ridge (regularized linear)** | **0.481** | 39.0 | 52.4 |
 | Random Forest | 0.462 | 41.1 | 53.3 |
 | XGBoost | 0.415 | 43.2 | 55.6 |
+
+**2025's fire count genuinely collapsed** — 3,430 detections vs. 36,310 in
+2022 — corroborated by independently reported Punjab Pollution Control Board
+figures (a 54% drop vs. 2024), not a data gap. The strongest predictive
+features are 3-day and 7-day cumulative fire activity and prior-day fire
+count, not same-day count alone, which is itself evidence of real
+atmospheric transport rather than coincidence.
+
+**Biggest open gap:** no weather data yet. Wind speed/direction, temperature,
+and humidity are the natural next addition — the lag-decay pattern is
+indirect evidence that wind-driven transport is the main missing variable.
+
+📄 **Full write-up with data-quality corrections, season-by-season breakdowns,
+and feature-importance detail: [`PHASE1_FINDINGS.md`](./PHASE1_FINDINGS.md).**
 
 ---
 
@@ -94,14 +112,8 @@ npm run dev
   consistent with a real atmospheric transport lag rather than a
   same-day coincidence.
 
-## What's next
-
-The lag-decay pattern is itself indirect evidence that wind-driven smoke
-transport is the biggest missing variable. Adding meteorological data (wind
-speed/direction, temperature, humidity, boundary-layer height) is the
-highest-value next step toward a stronger model.
-
 ---
 
-*Phase 1 analysis. See [`PHASE1_FINDINGS.md`](./PHASE1_FINDINGS.md) for full
-detail, data-quality corrections, and season-by-season figures.*
+*Phase 1 analysis. See [`PHASE1_FINDINGS.md`](./PHASE1_FINDINGS.md) for the
+full data-quality writeup, season-by-season figures, and everything behind
+the summary above.*
